@@ -1,10 +1,10 @@
-# proc_sim
+# Basic Processor Simulator#
 Simulation of a basic processor
 
 
-Current instructions
+##Current instructions##
 
-Arithmetic functions:
+###Arithmetic functions:###
 
 ADD R3 R1 R2  
 Adds R1 and R2 and stores the result in R3
@@ -22,7 +22,7 @@ if R1 is bigger than R2 then 1 is stored in R3
 
 Add divide  
 
-Bitwise instructions:
+###Bitwise instructions:###
 
 AND R3 R1 R2  
 Performs a bitwise AND on R1 and R2 and stores the result in R3
@@ -38,3 +38,31 @@ Right shift the contents of R1 by R2 and stores the result in R3
 
 NOT R2 R1  
 Performs a bitwise not on the contents of R1 and store the result in R2
+
+###Stores and loads:###
+
+LOAD R3 R1 R2  
+Loads the memory location of R1 + R2
+
+LOAD_VALUE R1 X  
+Loads the value of X to R1
+
+STORE R3 R1 R2  
+Stores R3 in memory address R1 + R2
+
+STORE_VALUE R1 R2 X  
+Stores the value of X in address R1 + R2
+
+###Branches and Jumps:###
+
+BRANCH_LT R1 R2 X  
+If R1 is less than R2 then branch to instruction X else the program continues
+
+BRANCH_NOT_ZERO R1 X  
+If R1 isn't 0 branch to X else the program continues
+
+ABS_JUMP X  
+Program jumps to instruction X
+
+REL_JUMP R1  
+Program jumps to instruction R1 relative to current position
