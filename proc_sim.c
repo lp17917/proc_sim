@@ -58,8 +58,10 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
     //Branchs and jumps
 		case BRANCH_LT:
 			if (RF[s1] < RF[s2]) *PC = target_addr; break;
+      else *PC++; break;
 		case BRANCH_NOT_ZERO:
 			if (s1 != 0) *PC = target_addr; break;
+      else *PC++; break;
 		case ABS_JUMP:
 			*PC = target_addr; break;
     case REL_JUMP:
