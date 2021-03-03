@@ -19,6 +19,9 @@ int main() {
 }
 
 
+int fetch(){
+  return 0;
+}
 
 int Execute(int opcode, int r, int s1, int s2, int *RF, int* MEM, int *PC, int target_addr, int *finished)
 {
