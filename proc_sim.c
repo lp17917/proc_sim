@@ -7,10 +7,16 @@ int main() {
 
 	int RF[32];
 	int MEM[1024];
-	int INSTR[512];
+	int INSTR_opcode[512];
+  int INSTR_operand1[512];
+  int INSTR_operand2[512];
+
 
 	while (!finished) {
-		Fetch();
+    int *opcode;
+    int *operand1;
+    int *operand2;
+		Fetch(int *opcode, int *operand1, int *operand2, int *INSTR_opcode, int *INSTR_operand1, int *INSTR_operand2 , int PC);
     cycles += 1;
 		Decode();
     cycles += 1;
@@ -22,8 +28,11 @@ int main() {
 }
 
 
-int fetch(){
-  return 0;
+int Fetch(int *opcode, int *operand1, int *operand2, int *INSTR_opcode, int *INSTR_operand1, int *INSTR_operand2, int PC)
+{
+  *opcode = *INSTR_opcode[PC];
+  *operand1 = *INSTR_operand1[PC];
+  *operand2 = *INSTR_operand2[PC];
 }
 
 int decode(){
