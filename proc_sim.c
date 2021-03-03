@@ -70,6 +70,9 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
     //Print statements
     case PRINT_INT:
       printf("%d", RF[r]); *PC++; break;
+    case PRINT_CHAR:
+      unsigned char i = RF[r] & 0xFF
+      printf("%x",i);
 
 		case HALT:
 			*finished = 1; break;
