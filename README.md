@@ -66,3 +66,11 @@ Program jumps to instruction X
 
 REL_JUMP R1  
 Program jumps to instruction R1 relative to current position
+
+###Print instuctions###
+
+PRINT_INT R1  
+Prints the value of R1
+
+PRINT_CHAR R1  
+Prints the last character of the register
