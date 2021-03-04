@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "benchmarks.h"
 
 #define ADD 0
 #define ADD_I 1
@@ -69,10 +70,9 @@ void vector_addition_set_reg_store(struct INSTUCTIONS *instr_set){
   /*041*/add_instr(i,        ADD,   3,   1,   2, instr_set); i++; //Add register 1 and 2 and put the result in reg 3
   /*042*/add_instr(i,      STORE,   3,  12,   2, instr_set); i++; //Store the value in reg 3 in memory
   /*043*/add_instr(i,  PRINT_INT,   3,   0,   0, instr_set); i++; //Prints value of r[i]
-  /*044*/add_instr(i, PRINT_CHAR,  32,   0,   0, instr_set); i++; //Prints a space
   /*045*/add_instr(i, PRINT_CHAR,  10,   0,   0, instr_set); i++; //Prints a newline
 
-  /*046*/add_instr(i,      ADD_I,  32,   0,   1, instr_set); i++; //Increment memory counter
+  /*046*/add_instr(i,      ADD_I,   0,   0,   1, instr_set); i++; //Increment memory counter
   /*047*/add_instr(i,  BRANCH_LT,  35,   0,   5, instr_set); i++; //Branch if loop ended
   /*048*/add_instr(i,       HALT,   0,   0,   0, instr_set); i++;   //Finish the program
 
