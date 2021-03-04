@@ -36,8 +36,8 @@ void vector_addition_set_reg_store(int *INSTR_opcode, int *INSTR_operandres, int
   /*001*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 11; INSTR_operand1[i] = 150; INSTR_operand2[i] = 0; i++;
   /*002*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 12; INSTR_operand1[i] = 200; INSTR_operand2[i] = 0; i++;
   for (int r = 0; r < 10; r++){
-    /*003*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = 10; INSTR_operand1[i] = a[r]; INSTR_operand2[i] = 0; i++;
-    /*004*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = 11; INSTR_operand1[i] = b[r]; INSTR_operand2[i] = 0; i++;
+    /*003*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = a[r]; INSTR_operand1[i] = 10; INSTR_operand2[i] = 0; i++;
+    /*004*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = b[r]; INSTR_operand1[i] = 11; INSTR_operand2[i] = 0; i++;
     /*005*/INSTR_opcode[i] = ADD_I; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 1; i++; //set counter to counter + 1
   }
   /*033*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;//resets counter to 0
