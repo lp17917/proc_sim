@@ -52,45 +52,45 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 
     //Arithmatic operations
 		case ADD:
-			RF[r] = RF[s1] + RF[s2]; *PC++; break;
+			RF[r] = RF[s1] + RF[s2]; (*PC)++; break;
     case ADD_I:
-      RF[r] = RF[s1] + s2; *PC++; break;
+      RF[r] = RF[s1] + s2; (*PC)++; break;
 		case MUL:
-			RF[r] = RF[s1] * RF[s2]; *PC++; break;
+			RF[r] = RF[s1] * RF[s2]; (*PC)++; break;
     case CMP:
-      if (RF[s1] == RF[s2]){ RF[r] = 0; *PC++; break;}
-      else if (RF[s1] < RF[s2]){ RF[r] = -1; *PC++; break;}
-      else {RF[r] = 1; *PC++; break;}
+      if (RF[s1] == RF[s2]){ RF[r] = 0; (*PC)++; break;}
+      else if (RF[s1] < RF[s2]){ RF[r] = -1; (*PC)++; break;}
+      else {RF[r] = 1; (*PC)++; break;}
 
     //Bitwise operations
     case AND:
-      RF[r] = RF[s1] & RF[s2]; *PC++; break;
+      RF[r] = RF[s1] & RF[s2]; (*PC)++; break;
     case OR:
-      RF[r] = RF[s1] | RF[s2]; *PC++; break;
+      RF[r] = RF[s1] | RF[s2]; (*PC)++; break;
     case L_SHIFT:
-      RF[r] = RF[s1] << RF[s2]; *PC++; break;
+      RF[r] = RF[s1] << RF[s2]; (*PC)++; break;
     case R_SHIFT:
-      RF[r] = RF[s1] >> RF[s2]; *PC++; break;
+      RF[r] = RF[s1] >> RF[s2]; (*PC)++; break;
     case NOT:
-      RF[r] = ~RF[s1]; *PC++; break;
+      RF[r] = ~RF[s1]; (*PC)++; break;
 
     //Load/store operations
 		case LOAD:
-			RF[r] = MEM[ RF[s1] + RF[s2] ]; *PC++; break;
+			RF[r] = MEM[ RF[s1] + RF[s2] ]; (*PC)++; break;
     case LOAD_VALUE:
-      RF[r] = s1; *PC++; break;
+      RF[r] = s1; (*PC)++; break;
 		case STORE:
-			MEM[ RF[s1] + RF[s2] ] = RF[r]; *PC++; break;
+			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*PC)++; break;
     case STORE_VALUE:
-      MEM[ RF[s1] + RF[s2] ] = r; *PC++; break;
+      MEM[ RF[s1] + RF[s2] ] = r; (*PC)++; break;
 
     //Branchs and jumps
 		case BRANCH_LT:
 			if (RF[s1] < RF[s2]){ *PC = r; break;}
-      else {*PC++; break;}
+      else {(*PC)++; break;}
 		case BRANCH_NOT_ZERO:
 			if (s1 != 0) {*PC = r; break;}
-      else {*PC++; break;}
+      else {(*PC)++; break;}
 		case ABS_JUMP:
 			*PC = r; break;
     case REL_JUMP:
@@ -98,13 +98,14 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 
     //Print statements
     case PRINT_INT:
-      printf("%d ", RF[r]); *PC++; break;
+      printf("%d ", RF[r]); (*PC)++; break;
     case PRINT_CHAR_REG:
-      printf("%c",(unsigned char)RF[r] & 0xFF); *PC++; break;
+      printf("%c",(unsigned char)RF[r] & 0xFF); (*PC)++; break;
     case PRINT_CHAR:
-      printf("%c",(unsigned char)r & 0xFF); *PC++; break;
+      printf("%c",(unsigned char)r & 0xFF); (*PC)++; break;
 
 		case HALT:
+      printf("Selected correctly");
 			*finished = 1; break;
 		default:
 			printf("Error: Opcode not recognised: %d", opcode); error = 1; break;
@@ -125,6 +126,12 @@ int main() {
   int INSTR_operandres[512];
   int INSTR_operand1[512];
   int INSTR_operand2[512];
+  for (int i=0; i<512; i++){
+    INSTR_opcode[i] = 0;
+    INSTR_operandres[i] = 0;
+    INSTR_operand1[i] = 0;
+    INSTR_operand2[i] = 0;
+  }
 
 
 	while (!finished) {
@@ -134,11 +141,11 @@ int main() {
     int operand2;
 		Fetch(&opcode, &operandres, &operand1, &operand2, INSTR_opcode, INSTR_operandres, INSTR_operand1, INSTR_operand2 , PC);
     cycles += 1;
+    //printf("Fetched: opcode: %d opres: %d operand1:%d operand2: %d PC: %d\n\n" , opcode, operandres, operand1, operand2, PC);
 		Decode();
     cycles += 1;
 		Execute(opcode, operandres, operand1, operand2, RF, MEM, &PC, 0, &finished);
     cycles += 1;
 		instructions++;
-
 	}
 }
