@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "benchmarks.h"
 
 #define ADD 0
 #define ADD_I 1
@@ -29,12 +29,12 @@
 #define HALT 500
 
 
-int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, int *INSTR_opcode, int *INSTR_operandres, int *INSTR_operand1, int *INSTR_operand2, int PC)
+int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INSTRUCTIONS *instr_set, int PC)
 {
-  *opcode = INSTR_opcode[PC];
-  *operandres = INSTR_operandres[PC];
-  *operand1 = INSTR_operand1[PC];
-  *operand2 = INSTR_operand2[PC];
+  *opcode = instr_set->INSTR_opcode[PC];
+  *operandres = instr_set->INSTR_operandres[PC];
+  *operand1 = instr_set->INSTR_operand1[PC];
+  *operand2 = instr_set->INSTR_operand2[PC];
   return 0;
 }
 
@@ -98,14 +98,13 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 
     //Print statements
     case PRINT_INT:
-      printf("%d ", RF[r]); (*PC)++; break;
+      printf("%d", RF[r]); (*PC)++; break;
     case PRINT_CHAR_REG:
       printf("%c",(unsigned char)RF[r] & 0xFF); (*PC)++; break;
     case PRINT_CHAR:
       printf("%c",(unsigned char)r & 0xFF); (*PC)++; break;
 
 		case HALT:
-      printf("Selected correctly");
 			*finished = 1; break;
 		default:
 			printf("Error: Opcode not recognised: %d", opcode); error = 1; break;
@@ -113,33 +112,21 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 	return error;
 }
 
-int main() {
+void run_instr_set(struct INSTRUCTIONS *instr_set){
+  int finished = 0;
+  int cycles = 0;
+  int instructions = 0;
+  int PC = 0;
 
-	int finished = 0;
-	int cycles = 0;
-	int instructions = 0;
-	int PC = 0;
+  int RF[32] = {0};
+  int MEM[1024] = {0};
 
-	int RF[32];
-	int MEM[1024];
-	int INSTR_opcode[512];
-  int INSTR_operandres[512];
-  int INSTR_operand1[512];
-  int INSTR_operand2[512];
-  for (int i=0; i<512; i++){
-    INSTR_opcode[i] = 0;
-    INSTR_operandres[i] = 0;
-    INSTR_operand1[i] = 0;
-    INSTR_operand2[i] = 0;
-  }
-
-
-	while (!finished) {
+  while (!finished) {
     int opcode;
     int operandres;
     int operand1;
     int operand2;
-		Fetch(&opcode, &operandres, &operand1, &operand2, INSTR_opcode, INSTR_operandres, INSTR_operand1, INSTR_operand2 , PC);
+		Fetch(&opcode, &operandres, &operand1, &operand2, instr_set, PC);
     cycles += 1;
     //printf("Fetched: opcode: %d opres: %d operand1:%d operand2: %d PC: %d\n\n" , opcode, operandres, operand1, operand2, PC);
 		Decode();
@@ -148,4 +135,16 @@ int main() {
     cycles += 1;
 		instructions++;
 	}
+  printf("--------- Vector addition finished ---------\n");
+  printf("cycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
+
+}
+
+int main() {
+
+  struct INSTRUCTIONS instruction_set;
+  generate(1, &instruction_set);
+  printf("--------- Running vector addition ---------\n");
+  run_instr_set(&instruction_set);
+
 }
