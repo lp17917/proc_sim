@@ -23,7 +23,8 @@
 #define REL_JUMP 303
 
 #define PRINT_INT 400
-#define PRINT_CHAR 401
+#define PRINT_CHAR_REG 401
+#define PRINT_CHAR 402
 
 #define HALT 500
 
@@ -85,21 +86,23 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 
     //Branchs and jumps
 		case BRANCH_LT:
-			if (RF[s1] < RF[s2]){ *PC = target_addr; break;}
+			if (RF[s1] < RF[s2]){ *PC = r; break;}
       else {*PC++; break;}
 		case BRANCH_NOT_ZERO:
-			if (s1 != 0) {*PC = target_addr; break;}
+			if (s1 != 0) {*PC = r; break;}
       else {*PC++; break;}
 		case ABS_JUMP:
-			*PC = target_addr; break;
+			*PC = r; break;
     case REL_JUMP:
         *PC += s1; break;
 
     //Print statements
     case PRINT_INT:
-      printf("%d", RF[r]); *PC++; break;
+      printf("%d ", RF[r]); *PC++; break;
+    case PRINT_CHAR_REG:
+      printf("%c",(unsigned char)RF[r] & 0xFF); *PC++; break;
     case PRINT_CHAR:
-      printf("%x",(unsigned char)RF[r] & 0xFF); *PC++; break;
+      printf("%c",(unsigned char)r & 0xFF); *PC++; break;
 
 		case HALT:
 			*finished = 1; break;
