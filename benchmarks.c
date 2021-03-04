@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 #define ADD 0
 #define ADD_I 1
 #define MUL 2
@@ -28,75 +27,81 @@
 
 #define HALT 500
 
-void vector_addition_set_reg_store(int *INSTR_opcode, int *INSTR_operandres, int *INSTR_operand1, int *INSTR_operand2){
-  int i = 0;
-  int a[10] = {10,5,2,2,50,7,1,99,52,0};
-  int b[10] = {15,1,100,100,10,13,0,1,132,0};
-  /*000*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 10; INSTR_operand1[i] = 100; INSTR_operand2[i] = 0; i++;
-  /*001*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 11; INSTR_operand1[i] = 150; INSTR_operand2[i] = 0; i++;
-  /*002*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 12; INSTR_operand1[i] = 200; INSTR_operand2[i] = 0; i++;
-  for (int r = 0; r < 10; r++){
-    /*003*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = a[r]; INSTR_operand1[i] = 10; INSTR_operand2[i] = 0; i++;
-    /*004*/INSTR_opcode[i] = STORE_VALUE; INSTR_operandres[i] = b[r]; INSTR_operand1[i] = 11; INSTR_operand2[i] = 0; i++;
-    /*005*/INSTR_opcode[i] = ADD_I; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 1; i++; //set counter to counter + 1
-  }
-  /*033*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;//resets counter to 0
-  /*034*/INSTR_opcode[i] = LOAD_VALUE; INSTR_operandres[i] = 5; INSTR_operand1[i] = 10; INSTR_operand2[i] = 2; i++;
-  //Add to allow for the printing of the arrays corretly
-
-
-  //Load a[i] into register 1
-  /*035*/INSTR_opcode[i] = LOAD; INSTR_operandres[i] = 1; INSTR_operand1[i] = 10; INSTR_operand2[i] = 0; i++;
-  //Prints value of a[i]
-  /*036*/INSTR_opcode[i] = PRINT_INT; INSTR_operandres[i] = 1; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-  //Prints a space
-  /*037*/INSTR_opcode[i] = PRINT_CHAR; INSTR_operandres[i] = 32; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-
-
-  //Load b[i] into register 2
-  /*038*/INSTR_opcode[i] = LOAD; INSTR_operandres[i] = 2; INSTR_operand1[i] = 11; INSTR_operand2[i] = 0; i++;
-  //Prints value of b[i]
-  /*039*/INSTR_opcode[i] = PRINT_INT; INSTR_operandres[i] = 2; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-  //Prints a space
-  /*040*/INSTR_opcode[i] = PRINT_CHAR; INSTR_operandres[i] = 32; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-
-
-  //Add register 1 and 2 and put the result in reg 3
-  /*041*/INSTR_opcode[i] = ADD; INSTR_operandres[i] = 3; INSTR_operand1[i] = 1; INSTR_operand2[i] = 2; i++;
-  //Store the value in reg 3 in memory
-  /*042*/INSTR_opcode[i] = STORE; INSTR_operandres[i] = 3; INSTR_operand1[i] = 12; INSTR_operand2[i] = 0; i++;
-  //Prints value of r[i]
-  /*043*/INSTR_opcode[i] = PRINT_INT; INSTR_operandres[i] = 3; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-  //Prints a space
-  /*044*/INSTR_opcode[i] = PRINT_CHAR; INSTR_operandres[i] = 32; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-
-  //Increment memeory counter
-  /*039*/INSTR_opcode[i] = ADD_I; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 1; i++;
-  //Branch if loop ended
-  /*040*/INSTR_opcode[i] = BRANCH_LT; INSTR_operandres[i] = 35; INSTR_operand1[i] = 0; INSTR_operand2[i] = 5; i++;
-  //Finish the program
-  /*041*/INSTR_opcode[i] = HALT; INSTR_operandres[i] = 0; INSTR_operand1[i] = 0; INSTR_operand2[i] = 0; i++;
-
-
-  //Add loop for adding but use branch
-}
-
-
-
-int main(){
+struct INSTUCTIONS {
   int INSTR_opcode[512];
   int INSTR_operandres[512];
   int INSTR_operand1[512];
   int INSTR_operand2[512];
-  for (int i=0; i<512; i++){
-    INSTR_opcode[i] = 0;
-    INSTR_operandres[i] = 0;
-    INSTR_operand1[i] = 0;
-    INSTR_operand2[i] = 0;
+};
+
+void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTUCTIONS *instr_set);
+
+void print_instuction(struct INSTUCTIONS *instr_set, int i);
+
+
+void vector_addition_set_reg_store(struct INSTUCTIONS *instr_set){
+  int i = 0;
+  int a[10] = {10,5,2,2,50,7,1,99,52,0};
+  int b[10] = {15,1,100,100,10,13,0,1,132,0};
+  /*000*/add_instr(i, LOAD_VALUE,  10,  100,   0, instr_set); i++;
+  /*001*/add_instr(i, LOAD_VALUE,  11,  150,   0, instr_set); i++;
+  /*002*/add_instr(i, LOAD_VALUE,  12,  200,   0, instr_set); i++;
+  for (int r = 0; r < 10; r++){
+/*003-030*/add_instr(i, STORE_VALUE,  a[r],  10,  0, instr_set); i++;
+/*004-031*/add_instr(i, STORE_VALUE,  b[r],  11,  0, instr_set); i++;
+/*005-032*/add_instr(i,       ADD_I,     0,   0,  1, instr_set); i++; //set counter to counter + 1
   }
-  vector_addition_set_reg_store(INSTR_opcode, INSTR_operandres, INSTR_operand1, INSTR_operand2);
+  /*033*/add_instr(i, LOAD_VALUE,   0,   0,   0, instr_set); i++; //Resets counter
+  /*034*/add_instr(i, LOAD_VALUE,   5,  10,   2, instr_set); i++; //Sets loop length
+
+  //Add to allow for the printing of the arrays corretly
+
+  /*035*/add_instr(i,       LOAD,   1,  10,   0, instr_set); i++; //Load a[i] into register 1
+  /*036*/add_instr(i,  PRINT_INT,   1,   0,   0, instr_set); i++; //Prints value of a[i]
+  /*037*/add_instr(i, PRINT_CHAR,  32,   0,   0, instr_set); i++; //Prints value of a[i]//Prints a space
+
+
+  /*038*/add_instr(i,       LOAD,   2,  11,   0, instr_set); i++; //Load b[i] into register 2
+  /*039*/add_instr(i,  PRINT_INT,   2,   0,   0, instr_set); i++; //Prints value of b[i]
+  /*040*/add_instr(i, PRINT_CHAR,  32,   0,   0, instr_set); i++; //Prints a space
+
+
+  /*041*/add_instr(i,        ADD,   3,   1,   2, instr_set); i++; //Add register 1 and 2 and put the result in reg 3
+  /*042*/add_instr(i,      STORE,   3,  12,   2, instr_set); i++; //Store the value in reg 3 in memory
+  /*043*/add_instr(i,  PRINT_INT,   3,   0,   0, instr_set); i++; //Prints value of r[i]
+  /*044*/add_instr(i, PRINT_CHAR,  32,   0,   0, instr_set); i++; //Prints a space
+  /*045*/add_instr(i, PRINT_CHAR,  10,   0,   0, instr_set); i++; //Prints a newline
+
+  /*046*/add_instr(i,      ADD_I,  32,   0,   1, instr_set); i++; //Increment memory counter
+  /*047*/add_instr(i,  BRANCH_LT,  35,   0,   5, instr_set); i++; //Branch if loop ended
+  /*048*/add_instr(i,       HALT,   0,   0,   0, instr_set); i++;   //Finish the program
+
+  //Printing using loop after reading again
+}
+
+
+
+void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTUCTIONS *instr_set){
+  instr_set->INSTR_opcode[i] = opcode;
+  instr_set->INSTR_operandres[i] = operandres;
+  instr_set->INSTR_operand1[i] = operand1;
+  instr_set->INSTR_operand2[i] = operand2;
+}
+
+void print_instuction(struct INSTUCTIONS *instr_set, int i){
+  printf("INSTRUCTION %d: opcode: %d opres: %d ", i, instr_set->INSTR_opcode[i], instr_set->INSTR_operandres[i]);
+  printf("oprand1: %d operand2: %d\n", instr_set->INSTR_operand1[i], instr_set->INSTR_operand2[i]);
+}
+
+
+int main(){
+  struct INSTUCTIONS instruction_set;
+  for (int i=0; i<512; i++){
+      add_instr(0, 0, 0, 0, 0, &instruction_set);
+  }
+  vector_addition_set_reg_store(&instruction_set);
   for (int i=0; i<40; i++){
-      printf("%d: Opcode: %d Opres: %d Oprand1: %d Oprand2: %d\n", i, INSTR_opcode[i], INSTR_operandres[i], INSTR_operand1[i], INSTR_operand2[i]);
+      print_instuction(&instruction_set, i);
   }
 
 
