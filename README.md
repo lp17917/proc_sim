@@ -4,6 +4,20 @@ Simulation of a processor with a small instruction set to showcase processor opt
 
 Use makefile to build and run proc_sim to automatically execute the current benchmarks
 
+## Current benchmarks
+
+### Vector addition
+
+Adds 2 vectors of size 10 and prints the two vectors and the output of the addition
+
+### Bubble Sort
+
+Performs a bubble sort on a list of 20 elements and displays the end result
+
+### Factorial
+
+Calculates 12! as it is the highest factorial an int can store (Will be changed when using ALU with overflow)
+
 ## Current instructions
 
 ### Arithmetic functions:
