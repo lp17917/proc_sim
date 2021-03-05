@@ -71,12 +71,12 @@ void vector_addition_set_reg_store(struct INSTRUCTIONS *instr_set){
 
   /*035*/add_instr(i,       LOAD,  R1, R10,  R0, instr_set); i++; //Load a[i] into register 1
   /*036*/add_instr(i,  PRINT_INT,  R1,   0,   0, instr_set); i++; //Prints value of a[i]
-  /*037*/add_instr(i, PRINT_CHAR,  43,   0,   0, instr_set); i++; //Prints value of a[i]//Prints a space
+  /*037*/add_instr(i, PRINT_CHAR,  43,   0,   0, instr_set); i++; //Prints a space
 
 
   /*038*/add_instr(i,       LOAD,  R2, R11,  R0, instr_set); i++; //Load b[i] into register 2
   /*039*/add_instr(i,  PRINT_INT,  R2,   0,   0, instr_set); i++; //Prints value of b[i]
-  /*040*/add_instr(i, PRINT_CHAR,  61,   0,   0, instr_set); i++; //Prints a space
+  /*040*/add_instr(i, PRINT_CHAR,  61,   0,   0, instr_set); i++; //Prints an equals
 
 
   /*041*/add_instr(i,        ADD,  R3,  R1,  R2, instr_set); i++; //Add register 1 and 2 and put the result in reg 3
@@ -105,16 +105,26 @@ void bubble_sort(struct INSTRUCTIONS *instr_set){
   /*043*/add_instr(i,       LOAD,    R5, R10, R1, instr_set); i++; //get first list element
   /*044*/add_instr(i,      ADD_I,    R2,  R1,  1, instr_set); i++; //get next mem address
   /*045*/add_instr(i,       LOAD,    R6, R10, R2, instr_set); i++; //get second list element
-  /*046*/add_instr(i,  BRANCH_LT,   100,  R6, R5, instr_set); i++; //Branch if r6 < r5 to make swap
+  /*046*/add_instr(i,  BRANCH_LT,   250,  R6, R5, instr_set); i++; //Branch if r6 < r5 to make swap
   /*047*/add_instr(i,      ADD_I,    R1,  R1,  1, instr_set); i++; //get next mem address
-  /*048*/add_instr(i, BRANCH_NOT_ZERO,  60,  R0,  0, instr_set); i++; //Branch if R0 is not 0
-  /*049*/add_instr(i,       HALT,     0,   0,  0, instr_set); i++; //End program
+  /*048*/add_instr(i, BRANCH_NOT_ZERO, 200,  R0,  0, instr_set); i++; //Branch if R0 is not 0
+  /*049*/add_instr(i, LOAD_VALUE,    R1,   0,  0, instr_set); i++;
 
-  i = 60;
+  for (int r = 0; r < 20; r++){
+/*050-126*/add_instr(i,        LOAD,    R0, R10, R1, instr_set); i++;
+/*051-127*/add_instr(i,       ADD_I,    R1,  R1,  1, instr_set); i++; //set counter to counter + 1
+/*052-128*/add_instr(i,   PRINT_INT,    R0,   0,  0, instr_set); i++;
+/*053-129*/add_instr(i,  PRINT_CHAR,    32,   0,  0, instr_set); i++;
+  }
+  /*130*/add_instr(i,  PRINT_CHAR,    10,   0,  0, instr_set); i++;
+  /*131*/add_instr(i,       HALT,     0,   0,  0, instr_set); i++; //End program
+
+
+  i = 200;
   /*060*/add_instr(i,  BRANCH_LT,   150,  R0, R1, instr_set); i++; //Branch if r6 < r5 to make swap
   /*061*/add_instr(i,   ABS_JUMP,    43,   0,  0, instr_set); i++; //Branch if r6 < r5 to make swap
 
-  i = 100;
+  i = 250;
   /*100*/add_instr(i,      STORE,    R6, R10,  R1, instr_set); i++; //Store R6 where R5 was taken from
   /*101*/add_instr(i,      STORE,    R5, R10,  R2, instr_set); i++; //Store R5 where R6 was taken from
   /*102*/add_instr(i,   ABS_JUMP,    48,   0,   0, instr_set); i++; //Jump back to loop

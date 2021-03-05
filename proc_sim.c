@@ -28,7 +28,6 @@
 
 #define HALT 500
 
-
 int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INSTRUCTIONS *instr_set, int PC)
 {
   *opcode = instr_set->INSTR_opcode[PC];
@@ -47,8 +46,7 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int *
 	int error = 0;
 	switch(opcode)
 	{
-    //instructions to ADD
-    //multiply w/ overflow
+
 
     //Arithmatic operations
 		case ADD:
@@ -89,7 +87,7 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int *
 			if (RF[s1] < RF[s2]){ *PC = r; (*ec)+=1; break;}
       else {(*PC)++; break;}
 		case BRANCH_NOT_ZERO:
-			if (s1 != 0) {*PC = r;  (*ec)+=1; break;}
+			if (RF[s1] != 0) {*PC = r;  (*ec)+=1; break;}
       else {(*PC)++; break;}
 		case ABS_JUMP:
 			*PC = r;  (*ec)+=1; break;
@@ -122,6 +120,7 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
   int MEM[1024] = {0};
 
   while (!finished) {
+    //printf("%d    %d     %d\n",PC, RF[0],RF[1]);
     int opcode;
     int operandres;
     int operand1;
@@ -134,6 +133,7 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
 		Execute(opcode, operandres, operand1, operand2, RF, MEM, &PC, &executioncycles, &finished);
     cycles += executioncycles;
 		instructions++;
+
 	}
   printf("cycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
 
@@ -146,6 +146,12 @@ int main() {
   printf("--------- Running vector addition ---------\n");
   run_instr_set(&instruction_set);
   printf("--------- Vector addition finished ---------\n");
+  clear_instr(&instruction_set);
+
+  generate(2, &instruction_set);
+  printf("--------- Running bubble sort ---------\n");
+  run_instr_set(&instruction_set);
+  printf("--------- Finished bubble sort ---------\n");
   clear_instr(&instruction_set);
 
 }
