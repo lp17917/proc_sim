@@ -2,6 +2,7 @@
 
 Simulation of a processor with a small instruction set to showcase processor optimisation techniques
 
+Use makefile to build and run proc_sim to automatically execute the current benchmarks
 
 ##Current instructions##
 
