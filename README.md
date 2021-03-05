@@ -1,4 +1,4 @@
-# Basic Processor Simulator#
+Basic Processor Simulator
 
 Simulation of a processor with a small instruction set to showcase processor optimisation techniques
 
