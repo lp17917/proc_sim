@@ -92,6 +92,41 @@ void vector_addition_set_reg_store(struct INSTRUCTIONS *instr_set){
 }
 
 
+void bubble_sort(struct INSTRUCTIONS *instr_set){
+  int i = 0;
+  int a[20] = {10,5,2,182,50,7,1,99,52,213, 15,1,100,171,10,13,0,1,132,999};
+  /*000*/add_instr(i, LOAD_VALUE,  R10,  100,   0, instr_set); i++; //Sets the memory address for the list
+  for (int r = 0; r < 20; r++){
+/*001-039*/add_instr(i, STORE_VALUE,  a[r], R10,  0, instr_set); i++;
+/*002-040*/add_instr(i,       ADD_I,    R0,  R0,  1, instr_set); i++; //set counter to counter + 1
+  }
+  /*041*/add_instr(i, LOAD_VALUE,    R0,  18,  0, instr_set); i++; //set outer loop counter to 18
+  /*042*/add_instr(i, LOAD_VALUE,    R1,   0,  0, instr_set); i++; //set inner loop counter to 0
+  /*043*/add_instr(i,       LOAD,    R5, R10, R1, instr_set); i++; //get first list element
+  /*044*/add_instr(i,      ADD_I,    R2,  R1,  1, instr_set); i++; //get next mem address
+  /*045*/add_instr(i,       LOAD,    R6, R10, R2, instr_set); i++; //get second list element
+  /*046*/add_instr(i,  BRANCH_LT,   100,  R6, R5, instr_set); i++; //Branch if r6 < r5 to make swap
+  /*047*/add_instr(i,      ADD_I,    R1,  R1,  1, instr_set); i++; //get next mem address
+  /*048*/add_instr(i, BRANCH_NOT_ZERO,  60,  R0,  0, instr_set); i++; //Branch if R0 is not 0
+  /*049*/add_instr(i,       HALT,     0,   0,  0, instr_set); i++; //End program
+
+  i = 60;
+  /*060*/add_instr(i,  BRANCH_LT,   150,  R0, R1, instr_set); i++; //Branch if r6 < r5 to make swap
+  /*061*/add_instr(i,   ABS_JUMP,    43,   0,  0, instr_set); i++; //Branch if r6 < r5 to make swap
+
+  i = 100;
+  /*100*/add_instr(i,      STORE,    R6, R10,  R1, instr_set); i++; //Store R6 where R5 was taken from
+  /*101*/add_instr(i,      STORE,    R5, R10,  R2, instr_set); i++; //Store R5 where R6 was taken from
+  /*102*/add_instr(i,   ABS_JUMP,    48,   0,   0, instr_set); i++; //Jump back to loop
+i = 150;
+  /*150*/add_instr(i,      ADD_I,    R0,  R0,  -1, instr_set); i++; //Jump back to loop
+  /*151*/add_instr(i,   ABS_JUMP,    42,   0,   0, instr_set); i++; //Jump back to loop
+
+
+}
+
+
+
 
 void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTRUCTIONS *instr_set){
   instr_set->INSTR_opcode[i] = opcode;
@@ -122,5 +157,7 @@ void generate(int i, struct INSTRUCTIONS *instruction_set){
   {
   case 1:
     vector_addition_set_reg_store(instruction_set); break;
+  case 2:
+    bubble_sort(instruction_set); break;
   }
 }
