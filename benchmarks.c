@@ -135,7 +135,23 @@ i = 150;
 
 }
 
+void factorial(struct INSTRUCTIONS *instr_set){
+  int i = 0;
+  /*000*/add_instr(i, LOAD_VALUE,  R0,  12,   0, instr_set); i++;
+  /*001*/add_instr(i, LOAD_VALUE,  R1,  11,   0, instr_set); i++;
+  /*002*/add_instr(i, LOAD_VALUE,  R2,  12,   0, instr_set); i++;
+  /*003*/add_instr(i,        MUL,  R0,  R0,  R1, instr_set); i++;
+  /*004*/add_instr(i,      ADD_I,  R1,  R1,  -1, instr_set); i++;
+  /*005*/add_instr(i, BRANCH_NOT_ZERO,   3,  R1,  0, instr_set); i++;
+  /*006*/add_instr(i,  PRINT_INT,  R2,   0,  0, instr_set); i++;
+  /*007*/add_instr(i, PRINT_CHAR,  33,   0,  0, instr_set); i++;
+  /*008*/add_instr(i, PRINT_CHAR,  61,   0,  0, instr_set); i++;
+  /*009*/add_instr(i, PRINT_CHAR,  32,   0,  0, instr_set); i++;
+  /*010*/add_instr(i,  PRINT_INT,  R0,   0,  0, instr_set); i++;
+  /*011*/add_instr(i, PRINT_CHAR,  10,   0,  0, instr_set); i++;
+  /*012*/add_instr(i,       HALT,   0,   0,  0, instr_set); i++; //End program
 
+}
 
 
 void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTRUCTIONS *instr_set){
@@ -169,5 +185,7 @@ void generate(int i, struct INSTRUCTIONS *instruction_set){
     vector_addition_set_reg_store(instruction_set); break;
   case 2:
     bubble_sort(instruction_set); break;
+  case 3:
+    factorial(instruction_set); break;
   }
 }

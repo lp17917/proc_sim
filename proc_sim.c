@@ -135,7 +135,7 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
 		instructions++;
 
 	}
-  printf("cycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
+  printf("\ncycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
 
 }
 
@@ -143,15 +143,21 @@ int main() {
 
   struct INSTRUCTIONS instruction_set;
   generate(1, &instruction_set);
-  printf("--------- Running vector addition ---------\n");
+  printf("--------- Running vector addition ---------\n\n");
   run_instr_set(&instruction_set);
-  printf("--------- Vector addition finished ---------\n");
+  printf("\n--------- Vector addition finished ---------\n\n");
   clear_instr(&instruction_set);
 
   generate(2, &instruction_set);
-  printf("--------- Running bubble sort ---------\n");
+  printf("--------- Running bubble sort ---------\n\n");
   run_instr_set(&instruction_set);
-  printf("--------- Finished bubble sort ---------\n");
+  printf("\n--------- Finished bubble sort ---------\n\n");
+  clear_instr(&instruction_set);
+
+  generate(3, &instruction_set);
+  printf("--------- Running factorial ---------\n\n");
+  run_instr_set(&instruction_set);
+  printf("\n--------- Finished factorial ---------\n\n");
   clear_instr(&instruction_set);
 
 }
