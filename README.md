@@ -2,6 +2,10 @@
 
 Simulation of a processor with a small instruction set to showcase processor optimisation techniques
 
+proc_sim.c store the actual processor simulator and performs the fetch execute cycle
+
+benchmarks.c generates the instructions with will be used within the simulation (The benchmark programs)
+
 Use makefile to build and run proc_sim to automatically execute the current benchmarks
 
 ## Current benchmarks
