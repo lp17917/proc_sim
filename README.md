@@ -1,12 +1,12 @@
-#Basic Processor Simulator#
+#Basic Processor Simulator
 
 Simulation of a processor with a small instruction set to showcase processor optimisation techniques
 
 Use makefile to build and run proc_sim to automatically execute the current benchmarks
 
-##Current instructions##
+##Current instructions
 
-###Arithmetic functions:###
+###Arithmetic functions:
 
 ADD R3 R1 R2  
 Adds R1 and R2 and stores the result in R3
@@ -23,7 +23,7 @@ if R1 is equal to R2 0 is stored in R3,
 if R1 is bigger than R2 then 1 is stored in R3
   
 
-###Bitwise instructions:###
+###Bitwise instructions:
 
 AND R3 R1 R2  
 Performs a bitwise AND on R1 and R2 and stores the result in R3
@@ -40,7 +40,7 @@ Right shift the contents of R1 by R2 and stores the result in R3
 NOT R2 R1 --
 Performs a bitwise not on the contents of R1 and store the result in R2
 
-###Stores and loads:###
+###Stores and loads:
 
 LOAD R3 R1 R2  
 Loads the memory location of R1 + R2
@@ -54,7 +54,7 @@ Stores R3 in memory address R1 + R2
 STORE_VALUE X R1 R2  
 Stores the value of X in address R1 + R2
 
-###Branches and Jumps:###
+###Branches and Jumps:
 
 BRANCH_LT X R1 R2   
 If R1 is less than R2 then branch to instruction X else the program continues
@@ -68,7 +68,7 @@ Program jumps to instruction X
 REL_JUMP -- R1 --  
 Program jumps to instruction R1 relative to current position
 
-###Print instuctions###
+###Print instuctions
 
 PRINT_INT R1 -- --
 Prints the value of R1
