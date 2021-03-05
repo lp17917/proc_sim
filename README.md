@@ -74,3 +74,7 @@ Prints the value of R1
 
 PRINT_CHAR R1 -- --
 Prints the last character of the register
+
+
+TODO:
+Add benchmarks for using bitwise and add divide instruction
