@@ -42,7 +42,7 @@ int Decode(){
   return 0;
 }
 
-int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int target_addr, int *finished)
+int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int *ec, int *finished)
 {
 	int error = 0;
 	switch(opcode)
@@ -52,60 +52,60 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int t
 
     //Arithmatic operations
 		case ADD:
-			RF[r] = RF[s1] + RF[s2]; (*PC)++; break;
+			RF[r] = RF[s1] + RF[s2]; (*PC)++; (*ec)+=1; break;
     case ADD_I:
-      RF[r] = RF[s1] + s2; (*PC)++; break;
+      RF[r] = RF[s1] + s2; (*PC)++; (*ec)+=1; break;
 		case MUL:
-			RF[r] = RF[s1] * RF[s2]; (*PC)++; break;
+			RF[r] = RF[s1] * RF[s2]; (*PC)++; (*ec)+=2; break;
     case CMP:
-      if (RF[s1] == RF[s2]){ RF[r] = 0; (*PC)++; break;}
-      else if (RF[s1] < RF[s2]){ RF[r] = -1; (*PC)++; break;}
-      else {RF[r] = 1; (*PC)++; break;}
+      if (RF[s1] == RF[s2]){ RF[r] = 0; (*PC)++; (*ec)+=1; break;}
+      else if (RF[s1] < RF[s2]){ RF[r] = -1; (*PC)++; (*ec)+=1; break;}
+      else {RF[r] = 1; (*PC)++; (*ec)+=1; break;}
 
     //Bitwise operations
     case AND:
-      RF[r] = RF[s1] & RF[s2]; (*PC)++; break;
+      RF[r] = RF[s1] & RF[s2]; (*PC)++; (*ec)+=1; break;
     case OR:
-      RF[r] = RF[s1] | RF[s2]; (*PC)++; break;
+      RF[r] = RF[s1] | RF[s2]; (*PC)++; (*ec)+=1; break;
     case L_SHIFT:
-      RF[r] = RF[s1] << RF[s2]; (*PC)++; break;
+      RF[r] = RF[s1] << RF[s2]; (*PC)++; (*ec)+=1; break;
     case R_SHIFT:
-      RF[r] = RF[s1] >> RF[s2]; (*PC)++; break;
+      RF[r] = RF[s1] >> RF[s2]; (*PC)++; (*ec)+=1; break;
     case NOT:
-      RF[r] = ~RF[s1]; (*PC)++; break;
+      RF[r] = ~RF[s1]; (*PC)++; (*ec)+=1; break;
 
     //Load/store operations
 		case LOAD:
-			RF[r] = MEM[ RF[s1] + RF[s2] ]; (*PC)++; break;
+			RF[r] = MEM[ RF[s1] + RF[s2] ]; (*PC)++; (*ec)+=3; break;
     case LOAD_VALUE:
       RF[r] = s1; (*PC)++; break;
 		case STORE:
-			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*PC)++; break;
+			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*PC)++; (*ec)+=3; break;
     case STORE_VALUE:
-      MEM[ RF[s1] + RF[s2] ] = r; (*PC)++; break;
+      MEM[ RF[s1] + RF[s2] ] = r; (*PC)++;  (*ec)+=3; break;
 
     //Branchs and jumps
 		case BRANCH_LT:
-			if (RF[s1] < RF[s2]){ *PC = r; break;}
+			if (RF[s1] < RF[s2]){ *PC = r; (*ec)+=1; break;}
       else {(*PC)++; break;}
 		case BRANCH_NOT_ZERO:
-			if (s1 != 0) {*PC = r; break;}
+			if (s1 != 0) {*PC = r;  (*ec)+=1; break;}
       else {(*PC)++; break;}
 		case ABS_JUMP:
-			*PC = r; break;
+			*PC = r;  (*ec)+=1; break;
     case REL_JUMP:
-        *PC += s1; break;
+        *PC += s1;  (*ec)+=1; break;
 
     //Print statements
     case PRINT_INT:
-      printf("%d", RF[r]); (*PC)++; break;
+      printf("%d", RF[r]); (*PC)++;  (*ec)+=2; break;
     case PRINT_CHAR_REG:
-      printf("%c",(unsigned char)RF[r] & 0xFF); (*PC)++; break;
+      printf("%c",(unsigned char)RF[r] & 0xFF); (*PC)++; (*ec)+=2; break;
     case PRINT_CHAR:
-      printf("%c",(unsigned char)r & 0xFF); (*PC)++; break;
+      printf("%c",(unsigned char)r & 0xFF); (*PC)++;  (*ec)+=2; break;
 
 		case HALT:
-			*finished = 1; break;
+			*finished = 1; (*ec)+=1; break;
 		default:
 			printf("Error: Opcode not recognised: %d", opcode); error = 1; break;
 	}
@@ -126,16 +126,15 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
     int operandres;
     int operand1;
     int operand2;
+    int executioncycles = 0;
 		Fetch(&opcode, &operandres, &operand1, &operand2, instr_set, PC);
     cycles += 1;
-    //printf("Fetched: opcode: %d opres: %d operand1:%d operand2: %d PC: %d\n\n" , opcode, operandres, operand1, operand2, PC);
 		Decode();
     cycles += 1;
-		Execute(opcode, operandres, operand1, operand2, RF, MEM, &PC, 0, &finished);
-    cycles += 1;
+		Execute(opcode, operandres, operand1, operand2, RF, MEM, &PC, &executioncycles, &finished);
+    cycles += executioncycles;
 		instructions++;
 	}
-  printf("--------- Vector addition finished ---------\n");
   printf("cycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
 
 }
@@ -146,5 +145,7 @@ int main() {
   generate(1, &instruction_set);
   printf("--------- Running vector addition ---------\n");
   run_instr_set(&instruction_set);
+  printf("--------- Vector addition finished ---------\n");
+  clear_instr(&instruction_set);
 
 }

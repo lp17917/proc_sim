@@ -52,11 +52,10 @@ void add_instr(int i, int opcode, int operandres, int operand1, int operand2, st
 
 void print_instruction(struct INSTRUCTIONS *instr_set, int i);
 
-
 void vector_addition_set_reg_store(struct INSTRUCTIONS *instr_set){
   int i = 0;
-  int a[10] = {10,5,2,2,50,7,1,99,52,0};
-  int b[10] = {15,1,100,100,10,13,0,1,132,0};
+  int a[10] = {10,5,2,182,50,7,1,99,52,213};
+  int b[10] = {15,1,100,171,10,13,0,1,132,999};
   /*000*/add_instr(i, LOAD_VALUE,  R10,  100,   0, instr_set); i++;
   /*001*/add_instr(i, LOAD_VALUE,  R11,  150,   0, instr_set); i++;
   /*002*/add_instr(i, LOAD_VALUE,  R12,  200,   0, instr_set); i++;
