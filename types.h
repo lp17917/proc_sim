@@ -11,7 +11,7 @@ struct instruction
 
 struct ALU
 {
-  //struct instruction;
+  struct instruction executinginstruction;
   int cycles_left;
   int out_reg;
   int out_result;
@@ -30,7 +30,7 @@ struct INSTRUCTIONS
 struct MEMORY
 {
   int MEM[2048];
-  //struct instruction;
+  struct instruction executinginstruction;
   int cycles_left;
   int out_reg;
   int out_result;
