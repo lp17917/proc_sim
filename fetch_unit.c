@@ -13,11 +13,11 @@ void load_instructs(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, in
   fetcher->waiting = 0;
 }
 
-int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct FETCH_UNIT *fetcher){
-  *opcode = fetcher->INSTR_opcode[fetcher->PC];
-  *operandres = fetcher->INSTR_operandres[fetcher->PC];
-  *operand1 = fetcher->INSTR_operand1[fetcher->PC];
-  *operand2 = fetcher->INSTR_operand2[fetcher->PC];
+int Fetch(struct instruction *instr, struct FETCH_UNIT *fetcher){
+  instr->opcode = fetcher->INSTR_opcode[fetcher->PC];
+  instr->operandres = fetcher->INSTR_operandres[fetcher->PC];
+  instr->operand1 = fetcher->INSTR_operand1[fetcher->PC];
+  instr->operand2 = fetcher->INSTR_operand2[fetcher->PC];
   return 0;
 }
 

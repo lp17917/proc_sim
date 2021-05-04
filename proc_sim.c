@@ -40,7 +40,6 @@ int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INS
 }
 */
 
-
 int Decode(){
   return 0;
 }
@@ -116,6 +115,7 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *ec, struc
 
 void run_instr_set(struct INSTRUCTIONS *instr_set){
   struct FETCH_UNIT fetch_u;
+  struct instruction fetch_out;
   load_instructs(&fetch_u, instr_set->INSTR_opcode, instr_set->INSTR_operandres, instr_set->INSTR_operand1, instr_set->INSTR_operand2);
   int finished = 0;
   int cycles = 0;
@@ -131,12 +131,12 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
     int operand1;
     int operand2;
     int executioncycles = 0;
-		Fetch(&opcode, &operandres, &operand1, &operand2, &fetch_u);
+		Fetch(&fetch_out, &fetch_u);
     increment_pc(&fetch_u);
     cycles += 1;
 		Decode();
     cycles += 1;
-		Execute(opcode, operandres, operand1, operand2, RF, MEM, &executioncycles, &fetch_u, &finished);
+		Execute(fetch_out.opcode, fetch_out.operandres, fetch_out.operand1, fetch_out.operand2, RF, MEM, &executioncycles, &fetch_u, &finished);
     cycles += executioncycles;
 		instructions++;
 

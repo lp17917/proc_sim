@@ -12,9 +12,17 @@ struct FETCH_UNIT
   int waiting;
 };
 
+struct instruction
+{
+  int opcode;
+  int operandres;
+  int operand1;
+  int operand2;
+};
+
 void load_instructs(struct FETCH_UNIT *fetcher, int *INSTR_opcode, int *INSTR_operandres, int *INSTR_operand1, int *INSTR_operand2);
 
-int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct FETCH_UNIT *fetcher);
+int Fetch(struct instruction *instr, struct FETCH_UNIT *fetcher);
 
 void increment_pc(struct FETCH_UNIT *fetcher);
 
