@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "benchmarks.h"
 #include "fetch_unit.h"
+#include "types.h"
+#include <unistd.h>
 
 #define ADD 0
 #define ADD_I 1
@@ -28,6 +30,7 @@
 #define PRINT_CHAR 402
 
 #define HALT 500
+#define NOOP 501
 
 /*
 int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INSTRUCTIONS *instr_set, int PC)
@@ -44,7 +47,39 @@ int Decode(){
   return 0;
 }
 
-int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *ec, struct FETCH_UNIT *fetcher, int *finished)
+void print_instr(struct instruction *instr){
+  printf("executing instruction: %d r: %d S1:%d S2:%d\n",instr->opcode,instr->operandres,instr->operand1,instr->operand2);
+}
+
+
+void checkifbranch(struct instruction *instr, struct FETCH_UNIT *fetcher){
+  switch(instr->opcode)
+
+  {
+    case BRANCH_LT:
+      set_waiting(fetcher, 1); break;
+    case BRANCH_NOT_ZERO:
+      set_waiting(fetcher, 1); break;
+    case ABS_JUMP:
+      set_waiting(fetcher, 1); break;
+    case REL_JUMP:
+      set_waiting(fetcher, 1); break;
+    default:
+      break;
+
+  }
+
+
+}
+
+void null_instr(struct instruction *instr){
+  instr->opcode = NOOP;
+  instr->operandres = 0;
+  instr->operand1 = 0;
+  instr->operand2 = 0;
+}
+
+int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, struct FETCH_UNIT *fetcher, int *finished)
 {
 	int error = 0;
 	switch(opcode)
@@ -53,60 +88,62 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *ec, struc
 
     //Arithmatic operations
 		case ADD:
-			RF[r] = RF[s1] + RF[s2]; (*ec)+=1; break;
+			RF[r] = RF[s1] + RF[s2]; break;
     case ADD_I:
-      RF[r] = RF[s1] + s2; (*ec)+=1; break;
+      RF[r] = RF[s1] + s2; break;
 		case MUL:
-			RF[r] = RF[s1] * RF[s2]; (*ec)+=2; break;
+			RF[r] = RF[s1] * RF[s2]; break;
     case CMP:
-      if (RF[s1] == RF[s2]){ RF[r] = 0; (*ec)+=1; break;}
-      else if (RF[s1] < RF[s2]){ RF[r] = -1; (*ec)+=1; break;}
-      else {RF[r] = 1; (*ec)+=1; break;}
+      if (RF[s1] == RF[s2]){ RF[r] = 0; break;}
+      else if (RF[s1] < RF[s2]){ RF[r] = -1; break;}
+      else {RF[r] = 1; break;}
 
     //Bitwise operations
     case AND:
-      RF[r] = RF[s1] & RF[s2]; (*ec)+=1; break;
+      RF[r] = RF[s1] & RF[s2]; break;
     case OR:
-      RF[r] = RF[s1] | RF[s2]; (*ec)+=1; break;
+      RF[r] = RF[s1] | RF[s2]; break;
     case L_SHIFT:
-      RF[r] = RF[s1] << RF[s2]; (*ec)+=1; break;
+      RF[r] = RF[s1] << RF[s2]; break;
     case R_SHIFT:
-      RF[r] = RF[s1] >> RF[s2]; (*ec)+=1; break;
+      RF[r] = RF[s1] >> RF[s2]; break;
     case NOT:
-      RF[r] = ~RF[s1]; (*ec)+=1; break;
+      RF[r] = ~RF[s1]; break;
 
     //Load/store operations
 		case LOAD:
-			RF[r] = MEM[ RF[s1] + RF[s2] ]; (*ec)+=3; break;
+			RF[r] = MEM[ RF[s1] + RF[s2] ]; break;
     case LOAD_VALUE:
       RF[r] = s1;  break;
 		case STORE:
-			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*ec)+=3; break;
+			MEM[ RF[s1] + RF[s2] ] = RF[r]; break;
     case STORE_VALUE:
-      MEM[ RF[s1] + RF[s2] ] = r;  (*ec)+=3; break;
+      MEM[ RF[s1] + RF[s2] ] = r; break;
 
     //Branchs and jumps
 		case BRANCH_LT:
-			if (RF[s1] < RF[s2]){ branch_pc(fetcher, r); (*ec)+=1; break;}
-      else {break;}
+			if (RF[s1] < RF[s2]){ branch_pc(fetcher, r); break;}
+      else {branch_pc(fetcher, (fetcher->PC) + 1); break;}
 		case BRANCH_NOT_ZERO:
-			if (RF[s1] != 0) {branch_pc(fetcher, r);  (*ec)+=1; break;}
-      else {break;}
+			if (RF[s1] != 0) {branch_pc(fetcher, r); break;}
+      else {branch_pc(fetcher, (fetcher->PC) + 1); break;}
 		case ABS_JUMP:
-			branch_pc(fetcher, r);  (*ec)+=1; break;
+			branch_pc(fetcher, r); break;
     case REL_JUMP:
-      branch_pc(fetcher, (fetcher->PC) + s1);  (*ec)+=1; break;
+      branch_pc(fetcher, (fetcher->PC) + s1); break;
 
     //Print statements
     case PRINT_INT:
-      printf("%d", RF[r]);  (*ec)+=2; break;
+      printf("%d", RF[r]); break;
     case PRINT_CHAR_REG:
-      printf("%c",(unsigned char)RF[r] & 0xFF); (*ec)+=2; break;
+      printf("%c",(unsigned char)RF[r] & 0xFF); break;
     case PRINT_CHAR:
-      printf("%c",(unsigned char)r & 0xFF);  (*ec)+=2; break;
+      printf("%c",(unsigned char)r & 0xFF); break;
 
+    case NOOP:
+      break;
 		case HALT:
-			*finished = 1; (*ec)+=1; break;
+			*finished = 1; break;
 		default:
 			printf("Error: Opcode not recognised: %d", opcode); error = 1; break;
 	}
@@ -115,12 +152,19 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *ec, struc
 
 void run_instr_set(struct INSTRUCTIONS *instr_set){
   struct FETCH_UNIT fetch_u;
-  struct instruction fetch_out;
+  struct instruction fetch_current;
+  struct instruction decode_next;
+  struct instruction decode_current;
+  struct instruction execute_next;
+  null_instr(&fetch_current);
+  null_instr(&decode_next);
+  null_instr(&decode_current);
+  null_instr(&execute_next);
   load_instructs(&fetch_u, instr_set->INSTR_opcode, instr_set->INSTR_operandres, instr_set->INSTR_operand1, instr_set->INSTR_operand2);
+  printf("set reloaded\n");
   int finished = 0;
   int cycles = 0;
   int instructions = 0;
-
   int RF[32] = {0};
   int MEM[1024] = {0};
 
@@ -130,15 +174,32 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
     int operandres;
     int operand1;
     int operand2;
-    int executioncycles = 0;
-		Fetch(&fetch_out, &fetch_u);
-    increment_pc(&fetch_u);
-    cycles += 1;
+
+    if (!get_waiting(&fetch_u)){
+		  Fetch(&fetch_current, &fetch_u);
+    }
+    else{
+      null_instr(&fetch_current);
+    }
+
+    checkifbranch(&fetch_current, &fetch_u);
+
+    if (!get_waiting(&fetch_u)){
+        increment_pc(&fetch_u);
+    }
+
+    decode_current = decode_next;
 		Decode();
-    cycles += 1;
-		Execute(fetch_out.opcode, fetch_out.operandres, fetch_out.operand1, fetch_out.operand2, RF, MEM, &executioncycles, &fetch_u, &finished);
-    cycles += executioncycles;
+    //print_instr(&fetch_current);
+
+		Execute(execute_next.opcode, execute_next.operandres, execute_next.operand1, execute_next.operand2, RF, MEM, &fetch_u, &finished);
+
+
+    decode_next = fetch_current;
+    execute_next = decode_current;
+
 		instructions++;
+    cycles += 1;
 
 	}
   printf("\ncycles:%d instructions:%d instructions per cycle: %3f\n", cycles, instructions, (float)instructions/(float)cycles);
@@ -149,6 +210,7 @@ int main() {
 
 
   struct INSTRUCTIONS instruction_set;
+
   generate(1, &instruction_set);
   printf("--------- Running vector addition ---------\n\n");
   run_instr_set(&instruction_set);

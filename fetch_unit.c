@@ -9,6 +9,7 @@ void load_instructs(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, in
     fetcher->INSTR_operand1[i] = operand1[i];
     fetcher->INSTR_operand2[i] = operand2[i];
   }
+
   fetcher->PC = 0;
   fetcher->waiting = 0;
 }

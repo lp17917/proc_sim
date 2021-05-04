@@ -1,14 +1,7 @@
 #ifndef benchmarker
 #define benchmarker
 
-
-struct INSTRUCTIONS
-{
-  int INSTR_opcode[512];
-  int INSTR_operandres[512];
-  int INSTR_operand1[512];
-  int INSTR_operand2[512];
-};
+#include "types.h"
 
 void generate(int i, struct INSTRUCTIONS *instruction_set);
 
