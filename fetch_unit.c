@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include "fetch_unit.h"
+
+
+void load_instructs(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, int *operand1, int *operand2){
+  for (int i=0; i<512; i++){
+    fetcher->INSTR_opcode[i] = opcode[i];
+    fetcher->INSTR_operandres[i] = operandres[i];
+    fetcher->INSTR_operand1[i] = operand1[i];
+    fetcher->INSTR_operand2[i] = operand2[i];
+  }
+  fetcher->PC = 0;
+  fetcher->waiting = 0;
+}
+
+int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct FETCH_UNIT *fetcher){
+  *opcode = fetcher->INSTR_opcode[fetcher->PC];
+  *operandres = fetcher->INSTR_operandres[fetcher->PC];
+  *operand1 = fetcher->INSTR_operand1[fetcher->PC];
+  *operand2 = fetcher->INSTR_operand2[fetcher->PC];
+  return 0;
+}
+
+void increment_pc(struct FETCH_UNIT *fetcher){
+  fetcher->PC++;
+}
+
+int get_waiting(struct FETCH_UNIT *fetcher){
+  return fetcher->waiting;
+}
+
+void set_waiting(struct FETCH_UNIT *fetcher, int wait){
+  fetcher->waiting = wait;
+}
+
+void branch_pc(struct FETCH_UNIT *fetcher, int location){
+  fetcher->PC = location;
+  if (get_waiting(fetcher)) {
+    set_waiting(fetcher, 0);
+  }
+}
