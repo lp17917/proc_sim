@@ -4,44 +4,6 @@
 #include "types.h"
 #include <unistd.h>
 
-#define ADD 0
-#define ADD_I 1
-#define MUL 2
-#define CMP 3
-
-#define AND 100
-#define OR 101
-#define L_SHIFT 102
-#define R_SHIFT 103
-#define NOT 104
-
-#define LOAD 200
-#define LOAD_VALUE 201
-#define STORE 202
-#define STORE_VALUE 203
-
-#define BRANCH_LT 300
-#define BRANCH_NOT_ZERO 301
-#define ABS_JUMP 302
-#define REL_JUMP 303
-
-#define PRINT_INT 400
-#define PRINT_CHAR_REG 401
-#define PRINT_CHAR 402
-
-#define HALT 500
-#define NOOP 501
-
-/*
-int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INSTRUCTIONS *instr_set, int PC)
-{
-  *opcode = instr_set->INSTR_opcode[PC];
-  *operandres = instr_set->INSTR_operandres[PC];
-  *operand1 = instr_set->INSTR_operand1[PC];
-  *operand2 = instr_set->INSTR_operand2[PC];
-  return 0;
-}
-*/
 
 int Decode(){
   return 0;
@@ -69,6 +31,18 @@ void checkifbranch(struct instruction *instr, struct FETCH_UNIT *fetcher){
 
   }
 
+}
+
+void checkifhalt(struct instruction *instr, struct FETCH_UNIT *fetcher){
+  switch(instr->opcode)
+
+  {
+    case HALT:
+      set_halt(fetcher, 1); break;
+    default:
+      break;
+
+  }
 
 }
 
@@ -175,16 +149,19 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
     int operand1;
     int operand2;
 
-    if (!get_waiting(&fetch_u)){
+    if (!get_waiting(&fetch_u) && !get_halt(&fetch_u)){
+      instructions++;
 		  Fetch(&fetch_current, &fetch_u);
     }
     else{
       null_instr(&fetch_current);
     }
 
+    //printf("fetched instruction: %d\n" ,fetch_current.opcode);
+    checkifhalt(&fetch_current, &fetch_u);
     checkifbranch(&fetch_current, &fetch_u);
 
-    if (!get_waiting(&fetch_u)){
+    if (!get_waiting(&fetch_u) && !get_halt(&fetch_u)){
         increment_pc(&fetch_u);
     }
 
@@ -195,10 +172,11 @@ void run_instr_set(struct INSTRUCTIONS *instr_set){
 		Execute(execute_next.opcode, execute_next.operandres, execute_next.operand1, execute_next.operand2, RF, MEM, &fetch_u, &finished);
 
 
+
     decode_next = fetch_current;
     execute_next = decode_current;
 
-		instructions++;
+
     cycles += 1;
 
 	}
