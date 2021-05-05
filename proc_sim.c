@@ -24,8 +24,6 @@ void checkifbranch(struct instruction *instr, struct FETCH_UNIT *fetcher){
       set_waiting(fetcher, 1); break;
     case ABS_JUMP:
       set_waiting(fetcher, 1); break;
-    case REL_JUMP:
-      set_waiting(fetcher, 1); break;
     default:
       break;
 
@@ -103,8 +101,6 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, struct FETCH_U
       else {branch_pc(fetcher, (fetcher->PC) + 1); break;}
 		case ABS_JUMP:
 			branch_pc(fetcher, r); break;
-    case REL_JUMP:
-      branch_pc(fetcher, (fetcher->PC) + s1); break;
 
     //Print statements
     case PRINT_INT:

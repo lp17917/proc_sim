@@ -39,7 +39,7 @@ CMP R3 R1 R2
 Compares R1 and R2, if R1 is lower than R2 -1 is stored in R3,
 if R1 is equal to R2 0 is stored in R3,
 if R1 is bigger than R2 then 1 is stored in R3
-  
+
 
 ### Bitwise instructions:
 
@@ -82,9 +82,6 @@ If R1 isn't 0 branch to X else the program continues
 
 ABS_JUMP X -- --
 Program jumps to instruction X
-
-REL_JUMP -- R1 --  
-Program jumps to instruction R1 relative to current position
 
 ### Print instuctions
 
