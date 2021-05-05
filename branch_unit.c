@@ -3,62 +3,33 @@
 
 void set_cycles_branch(struct BRANCH_U *branchunit);
 
-void load_instuct_branch(struct BRANCH_U *branchunit, struct instruction *instr){
+void load_instruct_branch(struct BRANCH_U *branchunit, struct instruction *instr){
   branchunit->executinginstruction = *instr;
-  set_cycles_m(branchunit);
+  branchunit->cycles_left = 1;
 }
 
+int is_jumping(struct BRANCH_U *branchunit){
+  return branchunit->jump;
+}
 
-int get_location(struct BRANCH_U *branchunit);
+int get_location(struct BRANCH_U *branchunit){
+  return branchunit->out_result;
+}
 
-int is_jumping(struct BRANCH_U *branchunit);
+void set_result_branch(struct BRANCH_U *branchunit){
+  int s1 = branchunit->executinginstruction.operand1;
+  int s2 = branchunit->executinginstruction.operand2;
+  int r = branchunit->executinginstruction.operandres;
+  switch(branchunit->executinginstruction.opcode){
 
-
-void set_cycles_m(struct MEM_U *memo){
-  switch(memo->executinginstruction.opcode){
-
-    memo->cycles_left = 3; break;
     case BRANCH_LT:
-			if (RF[s1] < RF[s2]){ branch_pc(fetcher, r); break;}
-      else {branch_pc(fetcher, (fetcher->PC) + 1); break;}
+			if (s1 < s2){ branchunit->jump = 1; branchunit->out_result = r; break;}
+      else {branchunit->jump = 0; branchunit->out_result = 0; break;}
 		case BRANCH_NOT_ZERO:
-			if (RF[s1] != 0) {branch_pc(fetcher, r); break;}
-      else {branch_pc(fetcher, (fetcher->PC) + 1); break;}
+			if (s1 != 0) {branchunit->jump = 1; branchunit->out_result = r; break;}
+      else {branchunit->jump = 0; branchunit->out_result = 0; break;}
 		case ABS_JUMP:
-			branch_pc(fetcher, r); break;
-    case REL_JUMP:
-      branch_pc(fetcher, (fetcher->PC) + s1); break;
-
-  }
-}
-
-int get_out_reg_m(struct MEM_U *memo){
-  return memo->out_reg;
-}
-
-int get_out_result_m(struct MEM_U *memo){
-  return memo->out_result;
-}
-
-void set_result_m(struct MEM_U *memo){
-  int s1 = memo->executinginstruction.operand1;
-  int s2 = memo->executinginstruction.operand2;
-  switch(memo->executinginstruction.opcode){
-
-		case LOAD:
-      memo->out_reg = memo->executinginstruction.operandres;
-			memo->out_result = memo->MEM[s1 + s2]; break;
-    case LOAD_VALUE:
-      memo->out_result = s1;
-      memo->out_reg = memo->executinginstruction.operandres; break;
-		case STORE:
-			memo->MEM[s1 + s2] = memo->executinginstruction.operandres;
-      memo->out_result = -1;
-      memo->out_reg = -1; break;
-    case STORE_VALUE:
-      memo->MEM[s1 + s2] = memo->executinginstruction.operandres;
-      memo->out_result = -1;
-      memo->out_reg = -1; break;
+			branchunit->jump = 1; branchunit->out_result = r; break;
 
   }
 
@@ -82,9 +53,10 @@ void perform_cycle_branch_u(struct BRANCH_U *branchunit){
 
     }
   }
+
   else if (branchunit->cycles_left == 0){
     branchunit->cycles_left = -1;
-    branchunit->out_reg = -1;
+    branchunit->jump = -1;
     branchunit->out_result = -1;
   }
 }

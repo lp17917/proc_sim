@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-void load_instuct_alu(struct A_LOGIC *alu, struct instruction *instr);
+void load_instruct_alu(struct A_LOGIC *alu, struct instruction *instr);
 
 int is_finished(struct A_LOGIC *alu);
 

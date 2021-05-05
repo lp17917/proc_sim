@@ -3,7 +3,7 @@
 
 void set_cycles(struct A_LOGIC *alu);
 
-void load_instuct_alu(struct A_LOGIC *alu, struct instruction *instr){
+void load_instruct_alu(struct A_LOGIC *alu, struct instruction *instr){
   alu->executinginstruction = *instr;
   set_cycles(alu);
 }

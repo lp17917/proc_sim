@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-void load_instuct_branch(struct BRANCH_U *branchunit, struct instruction *instr);
+void load_instruct_branch(struct BRANCH_U *branchunit, struct instruction *instr);
 
 int is_finished_branch(struct BRANCH_U *branchunit);
 
