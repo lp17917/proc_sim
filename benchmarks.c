@@ -2,52 +2,6 @@
 #include <stdio.h>
 #include "benchmarks.h"
 
-#define R0 0
-#define R1 1
-#define R2 2
-#define R3 3
-#define R4 4
-#define R5 5
-#define R6 6
-#define R7 7
-#define R8 8
-#define R9 9
-#define R10 10
-#define R11 11
-#define R12 12
-#define R13 13
-#define R14 14
-#define R15 15
-#define R16 16
-#define R17 17
-
-#define ADD 0
-#define ADD_I 1
-#define MUL 2
-#define CMP 3
-
-#define AND 100
-#define OR 101
-#define L_SHIFT 102
-#define R_SHIFT 103
-#define NOT 104
-
-#define LOAD 200
-#define LOAD_VALUE 201
-#define STORE 202
-#define STORE_VALUE 203
-
-#define BRANCH_LT 300
-#define BRANCH_NOT_ZERO 301
-#define ABS_JUMP 302
-#define REL_JUMP 303
-
-#define PRINT_INT 400
-#define PRINT_CHAR_REG 401
-#define PRINT_CHAR 402
-
-#define HALT 500
-
 void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTRUCTIONS *instr_set);
 
 void print_instruction(struct INSTRUCTIONS *instr_set, int i);
