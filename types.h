@@ -20,7 +20,6 @@
 #define BRANCH_LT 300
 #define BRANCH_NOT_ZERO 301
 #define ABS_JUMP 302
-#define REL_JUMP 303
 
 #define PRINT_INT 400
 #define PRINT_CHAR_REG 401
@@ -53,6 +52,13 @@ struct INSTRUCTIONS
   int INSTR_operand2[512];
 };
 
+struct BRANCH_U
+{
+  struct instruction executinginstruction;
+  int cycles_left;
+  int out_result;
+  int jump;
+};
 
 struct MEM_U
 {
