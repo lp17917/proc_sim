@@ -1,14 +1,16 @@
 #ifndef ALU
 #define ALU
 
-#inclued "types.h"
+#include "types.h"
 
-void load_instuct_alu(struct INSTRUCTIONS *instruction_set);
+void load_instuct_alu(struct A_LOGIC *alu, struct instruction *instr);
 
-void is_finished(struct ALU *alu);
+int is_finished(struct A_LOGIC *alu);
 
-void get_out_reg(struct ALU *alu);
+int get_out_reg(struct A_LOGIC *alu);
 
-void perform_cycle_alu(struct ALU *alu);
+int get_out_result(struct A_LOGIC *alu);
+
+void perform_cycle_alu(struct A_LOGIC *alu);
 
 #endif

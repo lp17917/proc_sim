@@ -169,7 +169,7 @@ void print_instruction(struct INSTRUCTIONS *instr_set, int i){
 
 void clear_instr(struct INSTRUCTIONS *instruction_set){
   for (int i=0; i<512; i++){
-      add_instr(0, 0, 0, 0, 0, instruction_set);
+      add_instr(0, NOOP, 0, 0, 0, instruction_set);
   }
 }
 
@@ -177,7 +177,7 @@ void clear_instr(struct INSTRUCTIONS *instruction_set){
 void generate(int i, struct INSTRUCTIONS *instruction_set){
 
   for (int i=0; i<512; i++){
-      add_instr(0, 0, 0, 0, 0, instruction_set);
+      add_instr(0, NOOP, 0, 0, 0, instruction_set);
   }
   switch (i)
   {
