@@ -1,12 +1,16 @@
 #ifndef MEMORY
 #define MEMORY
 
-#inclued "types.h"
+#include "types.h"
 
-void load_instuct_memory(struct INSTRUCTIONS *instruction_set);
+void load_instruct_memory(struct MEM_U *memo, struct instruction *instr);
 
-void is_finished(struct memory *memory);
+int is_finished_mem(struct MEM_U *memo);
 
-void perform_cycle_memory(struct ALU *alu);
+int get_out_reg_m(struct MEM_U *memo);
+
+int get_out_result_m(struct MEM_U *memo);
+
+void perform_cycle_memory(struct MEM_U *memo);
 
 #endif

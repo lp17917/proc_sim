@@ -54,7 +54,7 @@ struct INSTRUCTIONS
 };
 
 
-struct MEMORY
+struct MEM_U
 {
   int MEM[2048];
   struct instruction executinginstruction;

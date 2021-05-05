@@ -68,7 +68,7 @@ void set_result(struct A_LOGIC *alu){
 
 int is_finished(struct A_LOGIC *alu){
 
-  if (!(alu->cycles_left)){
+  if ((alu->cycles_left) < 1){
     return 1;
   }
   else{
@@ -86,14 +86,16 @@ int get_out_result(struct A_LOGIC *alu){
 
 
 void perform_cycle_alu(struct A_LOGIC *alu){
-  if (!(is_finished(alu))){
+  if (!(is_finished(alu)) && alu->cycles_left >= 0){
     alu->cycles_left -=1;
     if ((is_finished(alu))){
       set_result(alu);
 
     }
   }
-  else{
-    return;
+  else if (alu->cycles_left == 0){
+    alu->cycles_left = -1;
+    alu->out_reg = -1;
+    alu->out_result = -1;
   }
 }
