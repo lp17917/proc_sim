@@ -16,4 +16,8 @@ int get_waiting(struct FETCH_UNIT *fetcher);
 
 void set_waiting(struct FETCH_UNIT *fetcher, int wait);
 
+int get_halt(struct FETCH_UNIT *fetcher);
+
+void set_halt(struct FETCH_UNIT *fetcher, int halt);
+
 #endif

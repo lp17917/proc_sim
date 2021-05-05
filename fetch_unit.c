@@ -12,6 +12,7 @@ void load_instructs(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, in
 
   fetcher->PC = 0;
   fetcher->waiting = 0;
+  fetcher->halted = 0;
 }
 
 int Fetch(struct instruction *instr, struct FETCH_UNIT *fetcher){
@@ -39,4 +40,12 @@ void branch_pc(struct FETCH_UNIT *fetcher, int location){
   if (get_waiting(fetcher)) {
     set_waiting(fetcher, 0);
   }
+}
+
+int get_halt(struct FETCH_UNIT *fetcher){
+  return fetcher->halted;
+}
+
+void set_halt(struct FETCH_UNIT *fetcher, int halt){
+  fetcher->halted = halt;
 }
