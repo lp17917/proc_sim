@@ -1,5 +1,5 @@
-#ifndef benchmarker
-#define benchmarker
+#ifndef benchmarks
+#define benchmarks
 
 #include "types.h"
 

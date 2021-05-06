@@ -107,6 +107,31 @@ void factorial(struct INSTRUCTIONS *instr_set){
 
 }
 
+void a_test(struct INSTRUCTIONS *instr_set){
+  int i = 0;
+  /*000*/add_instr(i, LOAD_VALUE,  R0,  12,   0, instr_set); i++;
+  /*001*/add_instr(i, LOAD_VALUE,  R1,  11,   0, instr_set); i++;
+  /*002*/add_instr(i, LOAD_VALUE,  R2,  5,   0, instr_set); i++;
+  /*003*/add_instr(i, LOAD_VALUE,  R3,  2,   0, instr_set); i++;
+  /*004*/add_instr(i, LOAD_VALUE,  R4,  1,   0, instr_set); i++;
+  /*005*/add_instr(i, LOAD_VALUE,  R5,  99,   0, instr_set); i++;
+  /*006*/add_instr(i, LOAD_VALUE,  R6,  4,   0, instr_set); i++;
+  /*007*/add_instr(i, LOAD_VALUE,  R7,  0,   0, instr_set); i++;
+  /*008*/add_instr(i, ADD,  R8,  R0,   R1, instr_set); i++;
+  /*009*/add_instr(i, MUL,  R9,  R2,   R3, instr_set); i++;
+  /*010*/add_instr(i, ADD,  R10,  R4,   R5, instr_set); i++;
+  /*011*/add_instr(i, MUL,  R11,  R6,   R7, instr_set); i++;
+  /*008*/add_instr(i, PRINT_INT,  R8,  0,   0, instr_set); i++;
+  /*130*/add_instr(i,  PRINT_CHAR,    10,   0,  0, instr_set); i++;
+  /*009*/add_instr(i, PRINT_INT,  R9,  0,   0, instr_set); i++;
+  /*130*/add_instr(i,  PRINT_CHAR,    10,   0,  0, instr_set); i++;
+  /*010*/add_instr(i, PRINT_INT,  R10,  0,   0, instr_set); i++;
+  /*130*/add_instr(i,  PRINT_CHAR,    10,   0,  0, instr_set); i++;
+  /*011*/add_instr(i, PRINT_INT,  R11,  0,   0, instr_set); i++;
+  /*130*/add_instr(i,  PRINT_CHAR,    10,   0,  0, instr_set); i++;
+  /*012*/add_instr(i,       HALT,   0,   0,  0, instr_set); i++; //End program
+
+}
 
 void add_instr(int i, int opcode, int operandres, int operand1, int operand2, struct INSTRUCTIONS *instr_set){
   instr_set->INSTR_opcode[i] = opcode;
@@ -141,5 +166,8 @@ void generate(int i, struct INSTRUCTIONS *instruction_set){
     bubble_sort(instruction_set); break;
   case 3:
     factorial(instruction_set); break;
+
+  case 4:
+    a_test(instruction_set); break;
   }
 }
