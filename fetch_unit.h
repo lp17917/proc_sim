@@ -4,7 +4,7 @@
 #include "types.h"
 
 
-void load_instructs(struct FETCH_UNIT *fetcher, int *INSTR_opcode, int *INSTR_operandres, int *INSTR_operand1, int *INSTR_operand2);
+void load_instructs_fetch(struct FETCH_UNIT *fetcher, int *INSTR_opcode, int *INSTR_operandres, int *INSTR_operand1, int *INSTR_operand2);
 
 int Fetch(struct instruction *instr, struct FETCH_UNIT *fetcher);
 

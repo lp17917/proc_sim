@@ -2,7 +2,8 @@
 #include "fetch_unit.h"
 
 
-void load_instructs(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, int *operand1, int *operand2){
+
+void load_instructs_fetch(struct FETCH_UNIT *fetcher, int *opcode, int *operandres, int *operand1, int *operand2){
   for (int i=0; i<512; i++){
     fetcher->INSTR_opcode[i] = opcode[i];
     fetcher->INSTR_operandres[i] = operandres[i];
