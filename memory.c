@@ -1,5 +1,12 @@
 #include "memory.h"
 
+void init_m(struct MEM_U *memo){
+  memo->executinginstruction.opcode = NOOP;
+  memo->cycles_left = 0;
+  memo->out_result = -1;
+  memo->out_reg = -1;
+}
+
 
 void set_cycles_m(struct MEM_U *memo);
 

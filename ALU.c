@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "ALU.h"
 
+void init_a(struct A_LOGIC *alu){
+  alu->executinginstruction.opcode = NOOP;
+  alu->cycles_left = 0;
+  alu->out_result = -1;
+  alu->out_reg = -1;
+}
+
+
 void set_cycles(struct A_LOGIC *alu);
 
 void load_instruct_alu(struct A_LOGIC *alu, struct instruction *instr){

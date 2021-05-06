@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+void init_b(struct BRANCH_U *branchunit);
+
 void load_instruct_branch(struct BRANCH_U *branchunit, struct instruction *instr);
 
 int is_finished_branch(struct BRANCH_U *branchunit);

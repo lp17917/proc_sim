@@ -1,6 +1,13 @@
 #include "branch_unit.h"
 
 
+void init_b(struct BRANCH_U *branchunit){
+  branchunit->executinginstruction.opcode = NOOP;
+  branchunit->cycles_left = 0;
+  branchunit->out_result = -1;
+  branchunit->jump = -1;
+}
+
 void set_cycles_branch(struct BRANCH_U *branchunit);
 
 void load_instruct_branch(struct BRANCH_U *branchunit, struct instruction *instr){
@@ -46,7 +53,7 @@ int is_finished_branch(struct BRANCH_U *branchunit){
 }
 
 void perform_cycle_branch_u(struct BRANCH_U *branchunit){
-  if (!(is_finished_branch(branchunit)) && branchunit->cycles_left >= 0){
+  if (!(is_finished_branch(branchunit))){
     branchunit->cycles_left -=1;
     if ((is_finished_branch(branchunit))){
       set_result_branch(branchunit);

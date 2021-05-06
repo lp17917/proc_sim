@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+void init_a(struct A_LOGIC *alu);
+
 void load_instruct_alu(struct A_LOGIC *alu, struct instruction *instr);
 
 int is_finished(struct A_LOGIC *alu);

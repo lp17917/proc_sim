@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+void init_m(struct MEM_U *memo);
+
 void load_instruct_memory(struct MEM_U *memo, struct instruction *instr);
 
 int is_finished_mem(struct MEM_U *memo);
