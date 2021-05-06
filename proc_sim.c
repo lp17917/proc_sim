@@ -150,11 +150,19 @@ int Execute(struct instruction *instr, int *RF, int *finished, struct A_LOGIC *a
   }
 
 	else{
+    int fvalr = -1;
+    fvalr = check_forwarded(backloc, backval, instr->operandres);
     switch(instr->opcode){
     case PRINT_INT:
-      printf("%d", RF[instr->operandres]); break;
+      if (fvalr == -1){ printf("%d", RF[instr->operandres]); }
+      else{ printf("%d", fvalr); }
+
+      break;
     case PRINT_CHAR_REG:
-      printf("%c",(unsigned char)RF[instr->operandres] & 0xFF); break;
+      if (fvalr == -1){ printf("%c",(unsigned char)RF[instr->operandres] & 0xFF); }
+      else{ printf("%c",(unsigned char)fvalr & 0xFF); }
+
+      break;
     case PRINT_CHAR:
       printf("%c",(unsigned char)instr->operandres & 0xFF); break;
 
