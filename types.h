@@ -71,11 +71,29 @@ struct instruction
 
 struct A_LOGIC
 {
+  int res_id;
   struct instruction executinginstruction;
   int cycles_left;
   int out_reg;
   int out_result;
 };
+
+struct RES_STAT
+{
+  int res_id;
+  int busy;
+  struct instruction executinginstruction;
+  int opval1;
+  int opval2;
+  int opreg1;
+  int opreg2;
+  int opreg1res;
+  int opreg2res;
+  int opvalr;
+  int opregr;
+  int opregrres;
+};
+
 
 struct INSTRUCTIONS
 {
@@ -87,6 +105,7 @@ struct INSTRUCTIONS
 
 struct BRANCH_U
 {
+  int res_id;
   struct instruction executinginstruction;
   int cycles_left;
   int out_result;
@@ -95,6 +114,7 @@ struct BRANCH_U
 
 struct MEM_U
 {
+  int res_id;
   int MEM[2048];
   struct instruction executinginstruction;
   int cycles_left;
