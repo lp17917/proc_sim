@@ -1,14 +1,16 @@
-#ifndef dispatch
-#define dispatch
+#ifndef dispatch_queue
+#define dispatch_queue
 
 #include "types.h"
 
-void init_d(struct instruction *queued_instruct);
+void init_d(struct DISPATCH *queued_instruct);
 
-void add_disp_instr(struct instruction *queued_instruct);
+void add_disp_instr(struct DISPATCH *queued_instruct, struct instruction new);
 
-void can_dispatch(struct instruction *queued_instruct);
+int can_dispatch(struct DISPATCH *queued_instruct, int alu_free, int mem_u_free, int bran_free);
 
-int is_full(struct instruction *queued_instruct);
+void dispatch(struct DISPATCH *queued_instruct, struct instruction *instr);
+
+int is_full(struct DISPATCH *queued_instruct);
 
 #endif

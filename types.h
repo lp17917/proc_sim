@@ -104,7 +104,7 @@ struct MEM_U
 
 struct DISPATCH
 {
-  struct instruction queued_instruct[8];
+  struct instruction queued_instr[8];
 };
 
 struct FETCH_UNIT
