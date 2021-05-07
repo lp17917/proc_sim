@@ -3,6 +3,7 @@
 #include "dispatch_queue.h"
 #include "res_station.h"
 
+void dis_deps()
 
 int main() {
   struct instruction instr;
@@ -55,6 +56,7 @@ int main() {
   printf("is full: %d\n", is_full(&queued_instruct));
   if (!is_busy(&res_s)){
     dispatch(&queued_instruct, &instr);
+
   }
 
 }
