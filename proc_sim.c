@@ -27,6 +27,7 @@
 #define PRINT_CHAR 402
 
 #define HALT 500
+#define NOOP 501
 
 int Fetch(int *opcode, int *operandres, int *operand1, int *operand2, struct INSTRUCTIONS *instr_set, int PC)
 {
@@ -76,11 +77,11 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int *
 		case LOAD:
 			RF[r] = MEM[ RF[s1] + RF[s2] ]; (*PC)++; (*ec)+=3; break;
     case LOAD_VALUE:
-      RF[r] = s1; (*PC)++; break;
+      RF[r] = s1; (*PC)++; (*ec)+=1; break;
 		case STORE:
-			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*PC)++; (*ec)+=3; break;
+			MEM[ RF[s1] + RF[s2] ] = RF[r]; (*PC)++; (*ec)+=2; break;
     case STORE_VALUE:
-      MEM[ RF[s1] + RF[s2] ] = r; (*PC)++;  (*ec)+=3; break;
+      MEM[ RF[s1] + RF[s2] ] = r; (*PC)++;  (*ec)+=2; break;
 
     //Branchs and jumps
 		case BRANCH_LT:
@@ -104,6 +105,8 @@ int Execute(int opcode, int r, int s1, int s2, int *RF, int *MEM, int *PC, int *
 
 		case HALT:
 			*finished = 1; (*ec)+=1; break;
+    case NOOP:
+      (*PC)++;  (*ec)+=1; break;
 		default:
 			printf("Error: Opcode not recognised: %d", opcode); error = 1; break;
 	}
@@ -155,6 +158,12 @@ int main() {
   clear_instr(&instruction_set);
 
   generate(3, &instruction_set);
+  printf("--------- Running factorial ---------\n\n");
+  run_instr_set(&instruction_set);
+  printf("\n--------- Finished factorial ---------\n\n");
+  clear_instr(&instruction_set);
+
+  generate(4, &instruction_set);
   printf("--------- Running factorial ---------\n\n");
   run_instr_set(&instruction_set);
   printf("\n--------- Finished factorial ---------\n\n");
