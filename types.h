@@ -102,6 +102,11 @@ struct MEM_U
   int out_result;
 };
 
+struct DISPATCH
+{
+  struct instruction queued_instruct[8];
+};
+
 struct FETCH_UNIT
 {
   int INSTR_opcode[512];
